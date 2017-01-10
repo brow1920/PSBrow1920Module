@@ -1,12 +1,11 @@
 # See http://www.appveyor.com/docs/appveyor-yml for many more options
 
-#Delete the stuff below not real
-#Publish to PowerShell Gallery with this key
-#environment:
-#  NuGetApiKey:
-#    secure: oqMFzG8F65K5l572V7VzlZIWU7xnSYDLtSXECJAAURrXe8M2+BAp9vHLT+1h1lR0
-#Delete the stuff above not real
 
+#Publish to PowerShell Gallery with this key
+#Key Generator here: https://ci.appveyor.com/tools/encrypt (put in NuGetApiKey and it generates this key)
+environment:
+  NuGetApiKey:
+    secure: dtOklD5vHZ4764+GrPeD6Qu+f2kBqlbZXzHVB+frZbC7iYfaPrOuDGdCJNl9KL2V
 
 # Allow WMF5 (i.e. PowerShellGallery functionality)
 os: WMF 5
@@ -22,6 +21,13 @@ install:
 build: false
 
 test_script:
+# Test with native PS version
+  - ps: . .\PSBrow1920Module\Public\Add-Numbers.tests.ps1 -Test
+# Test with PS version 2
+  - ps: powershell.exe -version 2.0 -executionpolicy bypass -noprofile -file .\PSBrow1920Module\Public\Add-Numbers.tests.ps1 -Test
+# Finalize pass - collect and upload results
+  - ps: . .\PSBrow1920Module\Public\Add-Numbers.tests.ps1 -Finalize
+
 # Test with native PS version
   - ps: . .\Tests\appveyor.pester.ps1 -Test
 # Test with PS version 2
