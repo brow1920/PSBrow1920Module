@@ -7,16 +7,24 @@
 #    secure: oqMFzG8F65K5l572V7VzlZIWU7xnSYDLtSXECJAAURrXe8M2+BAp9vHLT+1h1lR0
 #Delete the stuff above not real
 
+
 # Allow WMF5 (i.e. PowerShellGallery functionality)
 os: WMF 5
 
 # Skip on updates to the readme.
-# We can force this by adding [skip ci] or [ci skip] anywhere in commit message 
+# We can force this by adding [skip ci] or [ci skip] anywhere in commit message
 skip_commits:
-  message: /updated readme.*|update readme.*s/
+  message: /updated readme.*/
+
+install:
+  - cinst pester -y
 
 build: false
 
-#Kick off the CI/CD pipeline
 test_script:
-  - ps: . .\build.ps1
+# Test with native PS version
+  - ps: . .\Tests\appveyor.pester.ps1 -Test
+# Test with PS version 2
+  - ps: powershell.exe -version 2.0 -executionpolicy bypass -noprofile -file .\Tests\appveyor.pester.ps1 -Test
+# Finalize pass - collect and upload results
+  - ps: . .\Tests\appveyor.pester.ps1 -Finalize
