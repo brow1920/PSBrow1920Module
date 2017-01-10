@@ -28,7 +28,11 @@ param(
     {
         "`n`tSTATUS: Testing with PowerShell $PSVersion`n"
     
+<<<<<<< HEAD
         Import-Module Pester -force
+=======
+        Import-Module Pester
+>>>>>>> origin/master
 
         Invoke-Pester @Verbose -Path "$ProjectRoot\Tests" -OutputFormat NUnitXml -OutputFile "$ProjectRoot\$TestFile" -PassThru |
             Export-Clixml -Path "$ProjectRoot\PesterResults_PS$PSVersion`_$Timestamp.xml"
@@ -76,4 +80,8 @@ param(
 
                 throw "$FailedCount tests failed."
             }
+<<<<<<< HEAD
     }
+=======
+    }
+>>>>>>> origin/master
